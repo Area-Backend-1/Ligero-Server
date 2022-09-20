@@ -23,13 +23,6 @@ export const login = async (req: Request, res: Response) => {
     //Convertir modelo a objeto
     const oUsuario = usuario!.get({ plain: true });
 
-    //Validar estado del usuario
-    if (!oUsuario.estado) {
-      return res.status(400).json({
-        errors: [{ msg: " actualmente inhabilitado" }],
-      });
-    }
-
     //Validar Password
     const validPassword = bcryptjs.compareSync(passwd, oUsuario.passwd);
 
@@ -105,4 +98,18 @@ export const registerUsuarioNatural = async (req: Request, res: Response) => {
       msg: "Hable con el administrador 0002",
     });
   }
+};
+
+export const renewToken = async (req: Request, res: Response) => {
+  const { usuario, uid } = req.params;
+
+  const user: any = usuario;
+
+  const token = await generarJWT(uid);
+
+  delete user.password;
+  res.json({
+    user,
+    token,
+  });
 };

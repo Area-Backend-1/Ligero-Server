@@ -8,6 +8,7 @@ const express_validator_1 = require("express-validator");
 const auth_controller_1 = require("../controllers/auth.controller");
 const db_validators_1 = require("../helpers/db-validators");
 const validar_campos_1 = __importDefault(require("../middlewares/validar-campos"));
+const validar_jwt_1 = __importDefault(require("../middlewares/validar-jwt"));
 const router = (0, express_1.Router)();
 router.post("/login", [
     (0, express_validator_1.check)("correo", "El correo es obligatorio").isEmail(),
@@ -28,5 +29,6 @@ router.post("/registerNatural", [
     }),
     validar_campos_1.default,
 ], auth_controller_1.registerUsuarioNatural);
+router.get("/renew", [validar_jwt_1.default], auth_controller_1.renewToken);
 exports.default = router;
 //# sourceMappingURL=auth.route.js.map

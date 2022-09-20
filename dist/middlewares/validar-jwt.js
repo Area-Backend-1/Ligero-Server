@@ -37,11 +37,11 @@ const validarJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         //Convertir modelo a objeto
         const oUsuario = usuario.get({ plain: true });
         //verificar Usuario si atenticado esta activo
-        if (!oUsuario.estado) {
-            return res.status(400).json({
-                errors: [{ msg: "Usuario inhabilitado" }],
-            });
-        }
+        // if (!oUsuario.estado) {
+        //   return res.status(400).json({
+        //     errors: [{ msg: "Usuario inhabilitado" }],
+        //   });
+        // }
         //Asignar objeto usuario a request
         req.params.usuario = oUsuario;
         req.params.uid = payload.uid;

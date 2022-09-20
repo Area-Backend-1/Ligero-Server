@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { login, registerUsuarioNatural } from "../controllers/auth.controller";
+import { login, registerUsuarioNatural, renewToken } from "../controllers/auth.controller";
 import { emailExiste } from "../helpers/db-validators";
 import validarCampos from "../middlewares/validar-campos";
 import validarFile from "../middlewares/validar-file";
@@ -36,5 +36,6 @@ router.post(
   ],
   registerUsuarioNatural
 );
+router.get("/renew", [validarJWT], renewToken);
 
 export default router;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUsuarioNatural = exports.login = void 0;
+exports.renewToken = exports.registerUsuarioNatural = exports.login = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const generar_jwt_1 = __importDefault(require("../helpers/generar-jwt"));
@@ -32,12 +32,6 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         //Convertir modelo a objeto
         const oUsuario = usuario.get({ plain: true });
-        //Validar estado del usuario
-        if (!oUsuario.estado) {
-            return res.status(400).json({
-                errors: [{ msg: " actualmente inhabilitado" }],
-            });
-        }
         //Validar Password
         const validPassword = bcryptjs_1.default.compareSync(passwd, oUsuario.passwd);
         if (!validPassword) {
@@ -108,4 +102,15 @@ const registerUsuarioNatural = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.registerUsuarioNatural = registerUsuarioNatural;
+const renewToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { usuario, uid } = req.params;
+    const user = usuario;
+    const token = yield (0, generar_jwt_1.default)(uid);
+    delete user.password;
+    res.json({
+        user,
+        token,
+    });
+});
+exports.renewToken = renewToken;
 //# sourceMappingURL=auth.controller.js.map

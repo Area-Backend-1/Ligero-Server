@@ -28,7 +28,7 @@ class Server {
             // users: "/api/dashboard/users",
         };
         this.app = (0, express_1.default)();
-        this.port = process.env.PORT || "8000";
+        this.port = process.env.PORT || "8001";
         this.dbConnection();
         this.middlewares();
         // crontabConstructor();

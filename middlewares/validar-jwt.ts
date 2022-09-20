@@ -33,11 +33,11 @@ const validarJWT = async (
     const oUsuario = usuario!.get({ plain: true });
 
     //verificar Usuario si atenticado esta activo
-    if (!oUsuario.estado) {
-      return res.status(400).json({
-        errors: [{ msg: "Usuario inhabilitado" }],
-      });
-    }
+    // if (!oUsuario.estado) {
+    //   return res.status(400).json({
+    //     errors: [{ msg: "Usuario inhabilitado" }],
+    //   });
+    // }
 
     //Asignar objeto usuario a request
     req.params.usuario = oUsuario;
