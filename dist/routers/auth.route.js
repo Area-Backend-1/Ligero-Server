@@ -30,5 +30,21 @@ router.post("/registerNatural", [
     validar_campos_1.default,
 ], auth_controller_1.registerUsuarioNatural);
 router.get("/renew", [validar_jwt_1.default], auth_controller_1.renewToken);
+router.post("/registerCompany", [
+    (0, express_validator_1.check)("empUsu", "El empUsu es obligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("nitEmp", "El nitEmp documento es obligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("nomCon", "El nomCon es obligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("correo", "El correo es obligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("correo", "El correo no es valido").isEmail(),
+    (0, express_validator_1.check)("correo").custom(db_validators_1.emailExiste),
+    (0, express_validator_1.check)("dirEmp", "El dirEmp es obligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("ciuEmp", "La ciuEmp es obligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("telEmp", "La telEmp es obligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("passwd", "El passwd debe tener mas de 4 caracteres").isLength({
+        min: 3,
+    }),
+    validar_campos_1.default,
+], auth_controller_1.registerUsuarioEmpresa);
+router.get("/renew", [validar_jwt_1.default], auth_controller_1.renewToken);
 exports.default = router;
 //# sourceMappingURL=auth.route.js.map

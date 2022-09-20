@@ -3,6 +3,7 @@ import Usuario from "../models/usuario";
 import bcryptjs from "bcryptjs";
 import generarJWT from "../helpers/generar-jwt";
 import Natural from "../models/natural";
+import Empresa from '../models/empresa';
 
 export const login = async (req: Request, res: Response) => {
   const { correo, passwd } = req.body;
@@ -92,6 +93,57 @@ export const registerUsuarioNatural = async (req: Request, res: Response) => {
       ok: true,
     });
     console.log("Natural::", req.body);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "Hable con el administrador 0002",
+    });
+  }
+};
+
+export const registerUsuarioEmpresa = async (req: Request, res: Response) => {
+  const { correo, passwd, empUsu, nitEmp, nomCon, ciuEmp, dirEmp, telEmp } = req.body;
+  try {
+    // //Encriptar password
+    const dificultad = bcryptjs.genSaltSync();
+
+    //REGISTRO USUARIO
+    const usuario = await Usuario.create({
+      correo: correo,
+      passwd: bcryptjs.hashSync(passwd, dificultad),
+      est_usu: true,
+      id_rol: 3,
+    });
+    const user = usuario!.get({ plain: true });
+
+    //REGISTRO CONTADOR
+    const empresa = await Empresa.create({
+      emp_usu: empUsu,
+      nit_emp: nitEmp,
+      nom_con: nomCon,
+      ciu_emp: ciuEmp,
+      dir_emp: dirEmp,
+      tel_emp: telEmp,
+      usu_emp: user.id,
+    });
+    const emp = empresa!.get({ plain: true });
+
+    //Generar JWT
+    console.log("PRINT LOGIN");
+    const token = await generarJWT(user.id);
+
+    console.log("PRINT LOGIN");
+    console.log(token);
+
+    // //Borrar password del object
+    delete user.password;
+    res.json({
+      user,
+      emp,
+      token,
+      ok: true,
+    });
+    console.log("Empresa::", req.body);
   } catch (error) {
     console.log(error);
     res.status(500).json({

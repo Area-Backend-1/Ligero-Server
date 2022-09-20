@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.renewToken = exports.registerUsuarioNatural = exports.login = void 0;
+exports.renewToken = exports.registerUsuarioEmpresa = exports.registerUsuarioNatural = exports.login = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const generar_jwt_1 = __importDefault(require("../helpers/generar-jwt"));
 const natural_1 = __importDefault(require("../models/natural"));
+const empresa_1 = __importDefault(require("../models/empresa"));
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { correo, passwd } = req.body;
     try {
@@ -102,6 +103,53 @@ const registerUsuarioNatural = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.registerUsuarioNatural = registerUsuarioNatural;
+const registerUsuarioEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { correo, passwd, empUsu, nitEmp, nomCon, ciuEmp, dirEmp, telEmp } = req.body;
+    try {
+        // //Encriptar password
+        const dificultad = bcryptjs_1.default.genSaltSync();
+        //REGISTRO USUARIO
+        const usuario = yield usuario_1.default.create({
+            correo: correo,
+            passwd: bcryptjs_1.default.hashSync(passwd, dificultad),
+            est_usu: true,
+            id_rol: 3,
+        });
+        const user = usuario.get({ plain: true });
+        //REGISTRO CONTADOR
+        const empresa = yield empresa_1.default.create({
+            emp_usu: empUsu,
+            nit_emp: nitEmp,
+            nom_con: nomCon,
+            ciu_emp: ciuEmp,
+            dir_emp: dirEmp,
+            tel_emp: telEmp,
+            usu_emp: user.id,
+        });
+        const emp = empresa.get({ plain: true });
+        //Generar JWT
+        console.log("PRINT LOGIN");
+        const token = yield (0, generar_jwt_1.default)(user.id);
+        console.log("PRINT LOGIN");
+        console.log(token);
+        // //Borrar password del object
+        delete user.password;
+        res.json({
+            user,
+            emp,
+            token,
+            ok: true,
+        });
+        console.log("Empresa::", req.body);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Hable con el administrador 0002",
+        });
+    }
+});
+exports.registerUsuarioEmpresa = registerUsuarioEmpresa;
 const renewToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { usuario, uid } = req.params;
     const user = usuario;
