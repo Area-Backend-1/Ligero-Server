@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const auth_route_1 = __importDefault(require("../routers/auth.route"));
 const categorias_route_1 = __importDefault(require("../routers/categorias.route"));
+// import natualRoutes from "../routers/categorias.route";
+const usuarios_route_1 = __importDefault(require("../routers/usuarios.route"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
@@ -22,8 +24,9 @@ const connection_1 = __importDefault(require("../db/connection"));
 class Server {
     constructor() {
         this.apiPaths = {
-            categorias: "/api/categorias",
             auth: "/api/auth",
+            categorias: "/api/categorias",
+            usuarios: "/api/usuarios"
             //dashboard route
             // users: "/api/dashboard/users",
         };
@@ -73,6 +76,7 @@ class Server {
     routes() {
         this.app.use(this.apiPaths.auth, auth_route_1.default);
         this.app.use(this.apiPaths.categorias, categorias_route_1.default);
+        this.app.use(this.apiPaths.usuarios, usuarios_route_1.default);
         // this.app.use(this.apiPaths.mapas, mapaRoutes);
         // this.app.use(this.apiPaths.orden, ordenRoutes);
         // this.app.use(this.apiPaths.servicio, servicioRoutes);

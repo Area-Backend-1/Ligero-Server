@@ -5,7 +5,8 @@ import path from "path";
 
 import authRoute from "../routers/auth.route";
 import categoriaRoutes from "../routers/categorias.route";
-import natualRoutes from "../routers/categorias.route";
+// import natualRoutes from "../routers/categorias.route";
+import usuarioRoutes from "../routers/usuarios.route";
 
 import fileUpload from "express-fileupload";
 
@@ -18,8 +19,9 @@ class Server {
   private port: string;
   private sslServer: https.Server;
   private apiPaths = {
+    auth: "/api/auth",  
     categorias: "/api/categorias",
-    auth: "/api/auth",    
+    usuarios: "/api/usuarios"
     //dashboard route
     // users: "/api/dashboard/users",
   };
@@ -78,6 +80,7 @@ class Server {
   routes() {
     this.app.use(this.apiPaths.auth, authRoute);
     this.app.use(this.apiPaths.categorias, categoriaRoutes);
+    this.app.use(this.apiPaths.usuarios, usuarioRoutes);
     // this.app.use(this.apiPaths.mapas, mapaRoutes);
     // this.app.use(this.apiPaths.orden, ordenRoutes);
     // this.app.use(this.apiPaths.servicio, servicioRoutes);
